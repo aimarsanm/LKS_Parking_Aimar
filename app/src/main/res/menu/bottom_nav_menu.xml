@@ -12,4 +12,13 @@
         android:id="@+id/person"
         android:title="Perfil"
         android:icon="@drawable/ic_person_foreground"/>
+    <item
+        android:id="@+id/home"
+        android:title="Home"
+        android:icon="@drawable/ic_home"/>
+    <item
+        android:id="@+id/Ajustes"
+        android:title="Ajustes"
+        android:icon="@drawable/ic_settings"/>
+
 </menu>
