@@ -1,24 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/newres"
-        android:title="Nueva reserva"
-        android:icon="@drawable/ic_newres_foreground"/>
+        android:id="@+id/Ajustes"
+        android:title="Ajustes"
+        android:icon="@drawable/ic_settings"/>
     <item
-        android:id="@+id/reservations"
-        android:title="Mis reservas"
-        android:icon="@drawable/ic_reservations_foreground"/>
+        android:id="@+id/home"
+        android:title="Inicio"
+        android:icon="@drawable/ic_home"/>
+    <item
+        android:id="@+id/newres"
+        android:title="Historial"
+        android:icon="@drawable/ic_coche"/>
     <item
         android:id="@+id/person"
         android:title="Perfil"
         android:icon="@drawable/ic_person_foreground"/>
-    <item
-        android:id="@+id/home"
-        android:title="Home"
-        android:icon="@drawable/ic_home"/>
-    <item
-        android:id="@+id/Ajustes"
-        android:title="Ajustes"
-        android:icon="@drawable/ic_settings"/>
+
+
 
 </menu>
