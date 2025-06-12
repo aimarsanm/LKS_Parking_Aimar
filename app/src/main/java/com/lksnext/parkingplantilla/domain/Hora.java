@@ -1,7 +1,7 @@
 package com.lksnext.parkingplantilla.domain;
 
 public class Hora {
-
+//hora
     long horaInicio;
     long horaFin;
 
