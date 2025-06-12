@@ -12,7 +12,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.lksnext.parkingplantilla.R;
 import com.lksnext.parkingplantilla.databinding.ActivityMainBinding;
 
-public class MainActivity extends AppCompatActivity {
+public class AjustesActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNavigationView;
     ActivityMainBinding binding;
@@ -40,8 +40,7 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
              if (itemId == R.id.ajustes) {
-                 navController.navigate(R.id.ajustesActivity);
-                 return true;
+                //TODO
             } else if (itemId == R.id.person) {
                 navController.navigate(R.id.loginActivity);
                 return true;
@@ -49,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
                 navController.navigate(R.id.mainFragment);
                 return true;
             }else if(itemId == R.id.historial){
-
+                //todo
             }
             return false;
         });

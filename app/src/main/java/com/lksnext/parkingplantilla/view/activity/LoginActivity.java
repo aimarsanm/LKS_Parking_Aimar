@@ -5,12 +5,17 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.ui.NavigationUI;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.lksnext.parkingplantilla.R;
 import com.lksnext.parkingplantilla.databinding.ActivityLoginBinding;
 import com.lksnext.parkingplantilla.viewmodel.LoginViewModel;
 
 public class LoginActivity extends AppCompatActivity {
-
+    NavController navController;
+    BottomNavigationView bottomNavigationView;
     private ActivityLoginBinding binding;
     private LoginViewModel loginViewModel;
 
@@ -51,5 +56,6 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+
     }
 }

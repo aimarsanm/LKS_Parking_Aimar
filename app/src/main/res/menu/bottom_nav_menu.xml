@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/Ajustes"
+        android:id="@+id/ajustes"
         android:title="Ajustes"
         android:icon="@drawable/ic_settings"/>
     <item
@@ -9,14 +9,11 @@
         android:title="Inicio"
         android:icon="@drawable/ic_home"/>
     <item
-        android:id="@+id/newres"
+        android:id="@+id/historial"
         android:title="Historial"
         android:icon="@drawable/ic_coche"/>
     <item
         android:id="@+id/person"
         android:title="Perfil"
         android:icon="@drawable/ic_person_foreground"/>
-
-
-
 </menu>

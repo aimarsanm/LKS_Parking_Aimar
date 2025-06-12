@@ -10,5 +10,21 @@
         android:name="com.lksnext.parkingplantilla.view.fragment.MainFragment"
         android:label="@string/fragment_main"
         tools:layout="@layout/fragment_main">
+        <action
+            android:id="@+id/action_mainFragment_to_loginActivity2"
+            app:destination="@id/loginActivity" />
     </fragment>
+    <activity
+        android:id="@+id/loginActivity"
+        android:name="com.lksnext.parkingplantilla.view.activity.LoginActivity"
+        android:label="activity_login"
+        tools:layout="@layout/activity_login" />
+    <activity
+        android:id="@+id/ajustesActivity"
+        android:name="com.lksnext.parkingplantilla.view.activity.AjustesActivity"
+        android:label="AjustesActivity" />
+    <activity
+        android:id="@+id/registerActivity"
+        android:name="com.lksnext.parkingplantilla.view.activity.RegisterActivity"
+        android:label="RegisterActivity" />
 </navigation>
