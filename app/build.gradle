@@ -12,7 +12,6 @@ sonar {
 
 apply plugin: 'com.android.application'
 apply plugin: 'androidx.navigation.safeargs'
-apply plugin: 'com.google.gms.google-services' // Google Services plugin
 
 android {
     namespace "com.lksnext.parkingplantilla"
@@ -57,17 +56,16 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.4.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.google.android.gms:play-services-maps:19.2.0'
-    implementation platform('com.google.firebase:firebase-bom:32.7.4')
-    implementation 'com.google.firebase:firebase-firestore'
-    implementation 'com.google.firebase:firebase-auth'
-    implementation 'com.google.firebase:firebase-firestore:25.1.4'
+    implementation 'com.google.firebase:firebase-auth:22.3.0'
+    implementation 'com.google.firebase:firebase-firestore:25.0.0'
 
-    testImplementation 'junit:junit:4.+'
     testImplementation 'androidx.arch.core:core-testing:2.2.0'
     testImplementation 'org.hamcrest:hamcrest:2.2'
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.13.2'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.2.0' // Added for MockitoExtension support
     testImplementation 'org.mockito:mockito-core:5.2.0'
-   
+    testImplementation 'org.mockito:mockito-inline:5.2.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+    testImplementation 'org.assertj:assertj-core:3.25.3'
 
     androidTestImplementation 'androidx.test.ext:junit:1.2.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
