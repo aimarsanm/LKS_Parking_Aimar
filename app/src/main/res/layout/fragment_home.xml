@@ -1,6 +1,187 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+<GridLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:columnCount="2"
+    android:rowCount="2"
+    android:padding="24dp"
+    android:alignmentMode="alignMargins"
+    android:rowOrderPreserved="false"
+    tools:context="com.lksnext.parkingplantilla.view.fragment.HomeFragment">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_row="0"
+        android:layout_column="0"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@color/orangeLight"
+        android:backgroundTint="@color/orangeLight"
+        android:backgroundTintMode="src_in"
+        android:alpha="0.85"
+        android:layout_margin="8dp"
+        android:elevation="4dp"
+        android:padding="20dp"
+        android:clipToOutline="true"
+        android:foreground="?android:attr/selectableItemBackground">
+        <!-- Quitado el ImageView del icono del coche -->
+        <TextView
+            android:id="@+id/titulo_coche"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Coche"
+            android:textColor="@color/orangeDark"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-medium"/>
+        <View
+            android:layout_width="40dp"
+            android:layout_height="2dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/orangeDark"/>
+        <ImageView
+            android:id="@+id/estado_coche"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="12dp"
+            android:src="@drawable/circle_green"
+            android:contentDescription="Estado plaza coche"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_row="0"
+        android:layout_column="1"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@color/orangeLight"
+        android:backgroundTint="@color/orangeLight"
+        android:backgroundTintMode="src_in"
+        android:alpha="0.85"
+        android:layout_margin="8dp"
+        android:elevation="4dp"
+        android:padding="20dp"
+        android:clipToOutline="true"
+        android:foreground="?android:attr/selectableItemBackground">
+        <!-- Quitado el ImageView del icono del híbrido -->
+        <TextView
+            android:id="@+id/titulo_hibrido"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Híbrido"
+            android:textColor="@color/orangeDark"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-medium"/>
+        <View
+            android:layout_width="40dp"
+            android:layout_height="2dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/orangeDark"/>
+        <!-- Quitado el TextView de libres_hibrido -->
+        <ImageView
+            android:id="@+id/estado_hibrido"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="12dp"
+            android:src="@drawable/circle_green"
+            android:contentDescription="Estado plaza híbrido"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_row="1"
+        android:layout_column="0"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@color/orangeLight"
+        android:backgroundTint="@color/orangeLight"
+        android:backgroundTintMode="src_in"
+        android:alpha="0.85"
+        android:layout_margin="8dp"
+        android:elevation="4dp"
+        android:padding="20dp"
+        android:clipToOutline="true"
+        android:foreground="?android:attr/selectableItemBackground">
+        <!-- Quitado el ImageView del icono de la moto -->
+        <TextView
+            android:id="@+id/titulo_moto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Moto"
+            android:textColor="@color/orangeDark"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-medium"/>
+        <View
+            android:layout_width="40dp"
+            android:layout_height="2dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/orangeDark"/>
+        <!-- Estado de la moto -->
+        <ImageView
+            android:id="@+id/estado_moto"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="12dp"
+            android:src="@drawable/circle_green"
+            android:contentDescription="Estado plaza moto"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_row="1"
+        android:layout_column="1"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@color/orangeLight"
+        android:backgroundTint="@color/orangeLight"
+        android:backgroundTintMode="src_in"
+        android:alpha="0.85"
+        android:layout_margin="8dp"
+        android:elevation="4dp"
+        android:padding="20dp"
+        android:clipToOutline="true"
+        android:foreground="?android:attr/selectableItemBackground">
+
+        <!-- Quitado el ImageView del icono de discapacitado -->
+        <TextView
+            android:id="@+id/titulo_discapacitado"
+            android:layout_width="wrap_content"
+            android:layout_height="85dp"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:text="Plaza\nDiscap."
+            android:textColor="@color/orangeDark"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+        <View
+            android:layout_width="40dp"
+            android:layout_height="2dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/orangeDark"/>
+        <!-- Estado de discapacitado -->
+        <ImageView
+            android:id="@+id/estado_discapacitado"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="12dp"
+            android:src="@drawable/circle_green"
+            android:contentDescription="Estado plaza discapacitado"/>
+    </LinearLayout>
+
+</GridLayout>

@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.lksnext.parkingplantilla">
 
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/zupark_icon"
@@ -11,18 +13,29 @@
         android:theme="@style/Theme.ParkingLKS">
         <activity
             android:name=".view.activity.RegisterActivity"
-            android:exported="false" />
+            android:exported="true" >
+
+        </activity>
         <activity
             android:name=".view.activity.LoginActivity"
             android:exported="true">
+
+        </activity>
+        <activity
+            android:name=".view.activity.MainActivity"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <activity
-            android:name=".view.activity.MainActivity"
-            android:exported="true" />
+            android:name=".view.activity.AjustesActivity"
+            android:exported="true" >
+
+        </activity>
+        <receiver android:name=".util.ReservaNotificationUtil$ReservaNotificationReceiver" android:exported="false" />
     </application>
 
 </manifest>

@@ -3,28 +3,44 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/mainFragment">
+    app:startDestination="@id/home">
 
     <fragment
-        android:id="@+id/mainFragment"
-        android:name="com.lksnext.parkingplantilla.view.fragment.MainFragment"
-        android:label="@string/fragment_main"
-        tools:layout="@layout/fragment_main">
-        <action
-            android:id="@+id/action_mainFragment_to_loginActivity2"
-            app:destination="@id/loginActivity" />
+        android:id="@+id/home"
+        android:name="com.lksnext.parkingplantilla.view.fragment.HomeFragment"
+        android:label="@string/fragment_home"
+        tools:layout="@layout/fragment_home">
+        <action android:id="@+id/action_main_to_crearReserva" app:destination="@id/crearReservaFragment" />
+        <action android:id="@+id/action_main_to_listareservas" app:destination="@id/listareservas" />
+        <action android:id="@+id/action_main_to_login" app:destination="@id/perfil" />
+        <action android:id="@+id/action_main_to_ajustes" app:destination="@id/ajustes" />
     </fragment>
-    <activity
-        android:id="@+id/loginActivity"
-        android:name="com.lksnext.parkingplantilla.view.activity.LoginActivity"
-        android:label="activity_login"
-        tools:layout="@layout/activity_login" />
-    <activity
-        android:id="@+id/ajustesActivity"
-        android:name="com.lksnext.parkingplantilla.view.activity.AjustesActivity"
-        android:label="AjustesActivity" />
-    <activity
-        android:id="@+id/registerActivity"
-        android:name="com.lksnext.parkingplantilla.view.activity.RegisterActivity"
-        android:label="RegisterActivity" />
+
+    <fragment
+        android:id="@+id/crearReservaFragment"
+        android:name="com.lksnext.parkingplantilla.view.fragment.CrearReservaFragment"
+        android:label="Crear Reserva">
+        <action android:id="@+id/action_crearReserva_to_home" app:destination="@id/home" />
+        <action android:id="@+id/action_crearReserva_to_listareservas" app:destination="@id/listareservas" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/listareservas"
+        android:name="com.lksnext.parkingplantilla.view.fragment.ListaReservasFragment"
+        android:label="Ver Reservas">
+        <action android:id="@+id/action_listaReservas_to_home" app:destination="@id/home" />
+        <action android:id="@+id/action_listaReservas_to_crearReserva" app:destination="@id/crearReservaFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/perfil"
+        android:name="com.lksnext.parkingplantilla.view.fragment.PerfilFragment"
+        android:label="@string/perfil"
+        tools:layout="@layout/fragment_perfil" />
+
+    <fragment
+        android:id="@+id/ajustes"
+        android:name="com.lksnext.parkingplantilla.view.fragment.AjustesFragment"
+        android:label="@string/ajustes"
+        tools:layout="@layout/fragment_ajustes" />
 </navigation>

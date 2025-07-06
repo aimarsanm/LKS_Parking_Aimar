@@ -1,6 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="24dp">
+
+        <Spinner
+            android:id="@+id/spinner_tipo_plaza"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:entries="@array/tipos_plaza"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <EditText
+            android:id="@+id/input_fecha"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Selecciona fecha"
+            android:focusable="false"
+            android:textColor="@color/orange"
+            app:layout_constraintTop_toBottomOf="@id/spinner_tipo_plaza"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp" />
+
+        <EditText
+            android:id="@+id/input_hora_inicio"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Hora inicio"
+            android:focusable="false"
+            android:textColor="@color/orange"
+            app:layout_constraintTop_toBottomOf="@id/input_fecha"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp" />
+
+        <EditText
+            android:id="@+id/input_hora_fin"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Hora fin"
+            android:focusable="false"
+            android:textColor="@color/orange"
+            app:layout_constraintTop_toBottomOf="@id/input_hora_inicio"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp" />
+
+        <Button
+            android:id="@+id/btn_reservar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Reservar"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/orange"
+            app:layout_constraintTop_toBottomOf="@id/input_hora_fin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="24dp" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

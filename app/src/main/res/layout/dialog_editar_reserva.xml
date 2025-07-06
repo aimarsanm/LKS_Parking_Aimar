@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tipo:"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:layout_marginBottom="8dp"/>
+
+    <Spinner
+        android:id="@+id/spinner_tipo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fecha:"
+        android:layout_marginTop="8dp"/>
+
+    <EditText
+        android:id="@+id/edit_fecha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Fecha"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hora inicio:"
+        android:layout_marginTop="8dp"/>
+
+    <EditText
+        android:id="@+id/edit_hora_inicio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Hora inicio"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hora fin:"
+        android:layout_marginTop="8dp"/>
+
+    <EditText
+        android:id="@+id/edit_hora_fin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Hora fin"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Plaza:"
+        android:layout_marginTop="8dp"/>
+
+    <EditText
+        android:id="@+id/edit_numero_plaza"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Número de plaza"/>
+
+
+</LinearLayout>

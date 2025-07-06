@@ -5,34 +5,46 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.lksnext.parkingplantilla.data.DataRepository;
-import com.lksnext.parkingplantilla.domain.Callback;
 
 public class LoginViewModel extends ViewModel {
 
     // Aquí puedes declarar los LiveData y métodos necesarios para la vista de inicio de sesión
     MutableLiveData<Boolean> logged = new MutableLiveData<>(null);
+    private final MutableLiveData<String> loginError = new MutableLiveData<>();
+    private final DataRepository dataRepository = DataRepository.getInstance();
 
     public LiveData<Boolean> isLogged(){
         return logged;
     }
+    public LiveData<String> getLoginError() { return loginError; }
 
     public void loginUser(String email, String password) {
-        //Clase para comprobar si los datos de inicio de sesión son correctos o no
-        DataRepository.getInstance().login(email, password, new Callback() {
-            //En caso de que el login sea correcto, que se hace
+        dataRepository.login(email, password, new com.lksnext.parkingplantilla.domain.Callback() {
             @Override
             public void onSuccess() {
-                //TODO
                 logged.setValue(Boolean.TRUE);
+                loginError.setValue(null);
             }
-
-            //En caso de que el login sea incorrecto, que se hace
             @Override
-            public void onFailure() {
-                //TODO
+            public void onFailure(String errorMessage) {
                 logged.setValue(Boolean.FALSE);
+                loginError.setValue(errorMessage);
             }
         });
     }
-}
 
+    // Obtener el usuario autenticado actual
+    public com.google.firebase.auth.FirebaseUser getCurrentUser() {
+        return dataRepository.getCurrentUser();
+    }
+    // Cerrar sesión
+    public void signOut() {
+        com.google.firebase.auth.FirebaseAuth.getInstance().signOut();
+        logged.setValue(Boolean.FALSE);
+    }
+
+    // Resetear contraseña
+    public void resetPassword(String email, com.lksnext.parkingplantilla.domain.Callback callback) {
+        dataRepository.sendPasswordResetEmail(email, callback);
+    }
+}

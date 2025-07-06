@@ -4,59 +4,55 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
-import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.lksnext.parkingplantilla.R;
 import com.lksnext.parkingplantilla.databinding.ActivityMainBinding;
+import androidx.navigation.fragment.NavHostFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    BottomNavigationView bottomNavigationView;
-    ActivityMainBinding binding;
-    NavController navController;
-    AppBarConfiguration appBarConfiguration;
+    private ActivityMainBinding binding;
+    private NavController navController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Asignamos la vista/interfaz main (layout)
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        //Con el NavigationHost podremos movernos por distintas pestañas dentro de la misma pantalla
-        NavHostFragment navHostFragment =
-            (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.flFragment);
+        // Obtén el NavController correctamente usando NavHostFragment
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.flFragment);
         navController = navHostFragment.getNavController();
 
-        //Asignamos los botones de navegacion que se encuentran en la vista (layout)
-        bottomNavigationView = binding.bottomNavigationView;
+        // Configura BottomNavigationView
+        BottomNavigationView bottomNavigationView = binding.bottomNavigationView;
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
-        //Dependendiendo que boton clique el usuario de la navegacion se hacen distintas cosas
-        bottomNavigationView.setOnItemSelectedListener(item -> {
-            int itemId = item.getItemId();
-             if (itemId == R.id.ajustes) {
-                 navController.navigate(R.id.ajustesActivity);
-                 return true;
-            } else if (itemId == R.id.person) {
-                navController.navigate(R.id.loginActivity);
-                return true;
-            } else if (itemId == R.id.home){
-                navController.navigate(R.id.mainFragment);
-                return true;
-            }else if(itemId == R.id.historial){
+        // Configura AppBar (opcional)
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.home,
+                R.id.ajustes,
+                R.id.perfil,
+                R.id.listareservas)
+                .build();
 
-            }
-            return false;
-        });
+        // Navega automáticamente al HomeFragment si el registro lo solicita
+        if (getIntent() != null && getIntent().getBooleanExtra("navigateToHome", false)) {
+            navController.popBackStack(); // Limpia el backstack si es necesario
+            navController.navigate(R.id.home);
+        }
+
+        // Crear canal de notificaciones al iniciar la app
+        com.lksnext.parkingplantilla.util.ReservaNotificationUtil.createNotificationChannel(this);
     }
 
     @Override
     public boolean onSupportNavigateUp() {
-        return NavigationUI.navigateUp(navController, appBarConfiguration) || super.onSupportNavigateUp();
+        return navController.navigateUp() || super.onSupportNavigateUp();
     }
 }

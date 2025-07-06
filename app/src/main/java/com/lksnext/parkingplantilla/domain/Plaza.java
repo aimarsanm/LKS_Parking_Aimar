@@ -8,7 +8,9 @@ public class Plaza {
     public Plaza() {
 
     }
-
+    public Plaza(String tipo) {
+        this.tipo = tipo;
+    }
     public Plaza(long id, String tipo) {
         this.id = id;
         this.tipo = tipo;

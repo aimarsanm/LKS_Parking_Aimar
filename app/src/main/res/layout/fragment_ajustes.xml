@@ -1,36 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="10dp"
-    tools:context=".view.fragment.MainFragment">
-
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigationView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#FF9800"
-        app:itemIconTint="@color/black"
-        app:itemTextColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/bottom_nav_menu" />
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="24dp"
+    tools:context="com.lksnext.parkingplantilla.view.fragment.AjustesFragment">
 
     <TextView
-        android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="AJUSTES"
-        tools:layout_editor_absoluteX="173dp"
-        tools:layout_editor_absoluteY="163dp" />
+        android:text="@string/ajustes"
+        android:textSize="24sp"
+        android:textColor="@color/orange"/>
 
-    <Switch
-        android:id="@+id/switch1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="173dp"
-        tools:layout_editor_absoluteY="246dp" />
+</LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,19 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/ajustes"
         android:title="Ajustes"
-        android:icon="@drawable/ic_settings"/>
+        android:icon="@drawable/ic_settings" />
     <item
         android:id="@+id/home"
         android:title="Inicio"
-        android:icon="@drawable/ic_home"/>
+        android:icon="@drawable/ic_home" />
     <item
-        android:id="@+id/historial"
-        android:title="Historial"
+        android:id="@+id/listareservas"
+        android:title="Lista de Reservas"
         android:icon="@drawable/ic_coche"/>
     <item
-        android:id="@+id/person"
+        android:id="@+id/perfil"
         android:title="Perfil"
-        android:icon="@drawable/ic_person_foreground"/>
+        android:icon="@drawable/ic_person_foreground" />
 </menu>
