@@ -45,6 +45,7 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
+        coreLibraryDesugaringEnabled true
     }
 }
 
@@ -53,7 +54,9 @@ jacoco {
 }
 
 tasks.register('jacocoTestReport', JacocoReport) {
-    dependsOn testDebugUnitTest
+    dependsOn 'testDebugUnitTest'
+    group = "Reporting"
+    description = "Generate Jacoco coverage reports after running unit tests."
     reports {
         xml.required = true
         html.required = true
@@ -62,14 +65,18 @@ tasks.register('jacocoTestReport', JacocoReport) {
         '**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*',
         '**/*Test*.*', 'android/**/*.*'
     ]
-    def debugTree = fileTree(dir: "$buildDir/intermediates/javac/debug/classes", excludes: fileFilter)
-    def mainSrc = "$projectDir/src/main/java"
-    sourceDirectories.setFrom(files([mainSrc]))
-    classDirectories.setFrom(files([debugTree]))
+    def javaDebugTree = fileTree(dir: "$buildDir/intermediates/javac/debug/classes", excludes: fileFilter)
+    def kotlinDebugTree = fileTree(dir: "$buildDir/tmp/kotlin-classes/debug", excludes: fileFilter)
+    classDirectories.setFrom(files([javaDebugTree, kotlinDebugTree]))
+    sourceDirectories.setFrom(files(["$projectDir/src/main/java", "$projectDir/src/main/kotlin"]))
     executionData.setFrom(fileTree(dir: buildDir, includes: [
         'jacoco/testDebugUnitTest.exec',
         'outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec'
     ]))
+    doFirst {
+        // Crea la carpeta de reportes si no existe
+        file("$buildDir/reports/jacoco/jacocoTestReport").mkdirs()
+    }
 }
 
 dependencies {
@@ -96,5 +103,5 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.2.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
     androidTestImplementation 'androidx.test:rules:1.6.1'
-
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
 }
