@@ -2,18 +2,19 @@ plugins {
     id "org.sonarqube" version "6.2.0.5505"
 }
 
+apply plugin: 'com.android.application'
+apply plugin: 'androidx.navigation.safeargs'
+apply plugin: 'jacoco'
+
 sonar {
     properties {
         property "sonar.projectKey", "aimarsanm_LKS_Parking_Aimar"
         property "sonar.organization", "aimarsanm-1"
-        property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.host.url", "https://sonarcloud.io "
         property "sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
+        property "sonar.exclusions", "**/R.class,**/BuildConfig.class,**/*Test*.class"
     }
 }
-
-apply plugin: 'com.android.application'
-apply plugin: 'androidx.navigation.safeargs'
-apply plugin: 'jacoco'
 
 android {
     namespace "com.lksnext.parkingplantilla"
@@ -22,8 +23,8 @@ android {
 
     defaultConfig {
         applicationId "com.lksnext.parkingplantilla"
-        minSdkVersion 24
-        targetSdkVersion 35
+        minSdk 24
+        targetSdk 35
         versionCode 1
         versionName "1.0.0"
 
@@ -35,10 +36,13 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug {
+            testCoverageEnabled true // Importante para JaCoCo
+        }
     }
 
     buildFeatures {
-        dataBinding = true
+        dataBinding true
         viewBinding true
     }
 
@@ -57,24 +61,28 @@ tasks.register('jacocoTestReport', JacocoReport) {
     dependsOn 'testDebugUnitTest'
     group = "Reporting"
     description = "Generate Jacoco coverage reports after running unit tests."
+
     reports {
         xml.required = true
         html.required = true
     }
+
     def fileFilter = [
         '**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*',
         '**/*Test*.*', 'android/**/*.*'
     ]
+
     def javaDebugTree = fileTree(dir: "$buildDir/intermediates/javac/debug/classes", excludes: fileFilter)
     def kotlinDebugTree = fileTree(dir: "$buildDir/tmp/kotlin-classes/debug", excludes: fileFilter)
+
     classDirectories.setFrom(files([javaDebugTree, kotlinDebugTree]))
     sourceDirectories.setFrom(files(["$projectDir/src/main/java", "$projectDir/src/main/kotlin"]))
     executionData.setFrom(fileTree(dir: buildDir, includes: [
         'jacoco/testDebugUnitTest.exec',
         'outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec'
     ]))
+
     doFirst {
-        // Crea la carpeta de reportes si no existe
         file("$buildDir/reports/jacoco/jacocoTestReport").mkdirs()
     }
 }
@@ -94,7 +102,7 @@ dependencies {
 
     testImplementation 'androidx.arch.core:core-testing:2.2.0'
     testImplementation 'org.hamcrest:hamcrest:2.2'
-    testImplementation 'org.mockito:mockito-junit-jupiter:5.2.0' // Added for MockitoExtension support
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.2.0'
     testImplementation 'org.mockito:mockito-core:5.2.0'
     testImplementation 'org.mockito:mockito-inline:5.2.0'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
