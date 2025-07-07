@@ -11,7 +11,19 @@ import java.util.List;
 
 public class ReservaViewModel extends ViewModel {
 
-    private final ReservaRepository repository = new ReservaRepository();
+    private ReservaRepository repository;
+    // Constructor por defecto
+    public ReservaViewModel() {
+        this.repository = new ReservaRepository();
+    }
+    // Constructor para tests
+    public ReservaViewModel(ReservaRepository repository) {
+        this.repository = repository;
+    }
+    // Permitir inyección para tests legacy
+    void setRepository(ReservaRepository mockRepo) {
+        this.repository = mockRepo;
+    }
 
     private final MutableLiveData<Boolean> reservaExitosa = new MutableLiveData<>();
     private final MutableLiveData<List<Reserva>> reservasUsuario = new MutableLiveData<>();

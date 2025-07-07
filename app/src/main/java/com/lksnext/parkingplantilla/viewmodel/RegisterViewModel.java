@@ -13,19 +13,23 @@ public class RegisterViewModel extends ViewModel {
     private final MutableLiveData<String> registerError = new MutableLiveData<>();
     public LiveData<String> getRegisterError() { return registerError; }
 
-    private final DataRepository dataRepository = DataRepository.getInstance();
+    private DataRepository dataRepository = DataRepository.getInstance();
+    // Permitir inyección para tests
+    void setDataRepository(DataRepository mockRepo) {
+        this.dataRepository = mockRepo;
+    }
 
     public void register(String nombre, String apellido, String email, String password) {
         dataRepository.registerWithUserData(email, password, nombre, apellido, new com.lksnext.parkingplantilla.domain.Callback() {
             @Override
             public void onSuccess() {
-                registerSuccess.postValue(true);
-                registerError.postValue(null);
+                registerSuccess.setValue(true);
+                registerError.setValue(null);
             }
             @Override
             public void onFailure(String errorMessage) {
-                registerSuccess.postValue(false);
-                registerError.postValue(errorMessage);
+                registerSuccess.setValue(false);
+                registerError.setValue(errorMessage);
             }
         });
     }

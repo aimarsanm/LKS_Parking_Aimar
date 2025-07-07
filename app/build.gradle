@@ -5,6 +5,7 @@ plugins {
 apply plugin: 'com.android.application'
 apply plugin: 'androidx.navigation.safeargs'
 apply plugin: 'jacoco'
+apply plugin: 'com.google.gms.google-services'
 
 sonar {
     properties {
@@ -37,7 +38,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
-            testCoverageEnabled true // Importante para JaCoCo
+            testCoverageEnabled true
         }
     }
 
@@ -57,35 +58,7 @@ jacoco {
     toolVersion = "0.8.11"
 }
 
-tasks.register('jacocoTestReport', JacocoReport) {
-    dependsOn 'testDebugUnitTest'
-    group = "Reporting"
-    description = "Generate Jacoco coverage reports after running unit tests."
 
-    reports {
-        xml.required = true
-        html.required = true
-    }
-
-    def fileFilter = [
-        '**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*',
-        '**/*Test*.*', 'android/**/*.*'
-    ]
-
-    def javaDebugTree = fileTree(dir: "$buildDir/intermediates/javac/debug/classes", excludes: fileFilter)
-    def kotlinDebugTree = fileTree(dir: "$buildDir/tmp/kotlin-classes/debug", excludes: fileFilter)
-
-    classDirectories.setFrom(files([javaDebugTree, kotlinDebugTree]))
-    sourceDirectories.setFrom(files(["$projectDir/src/main/java", "$projectDir/src/main/kotlin"]))
-    executionData.setFrom(fileTree(dir: buildDir, includes: [
-        'jacoco/testDebugUnitTest.exec',
-        'outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec'
-    ]))
-
-    doFirst {
-        file("$buildDir/reports/jacoco/jacocoTestReport").mkdirs()
-    }
-}
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.7.0'
@@ -100,16 +73,36 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:22.3.0'
     implementation 'com.google.firebase:firebase-firestore:25.0.0'
 
-    testImplementation 'androidx.arch.core:core-testing:2.2.0'
-    testImplementation 'org.hamcrest:hamcrest:2.2'
-    testImplementation 'org.mockito:mockito-junit-jupiter:5.2.0'
+    testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.mockito:mockito-core:5.2.0'
     testImplementation 'org.mockito:mockito-inline:5.2.0'
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
-    testImplementation 'org.assertj:assertj-core:3.25.3'
+    testImplementation 'org.hamcrest:hamcrest:2.2'
+    testImplementation 'androidx.arch.core:core-testing:2.2.0'
+    testImplementation 'org.jacoco:org.jacoco.core:0.8.12'
+    testImplementation 'org.jacoco:org.jacoco.report:0.8.12'
 
     androidTestImplementation 'androidx.test.ext:junit:1.2.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
     androidTestImplementation 'androidx.test:rules:1.6.1'
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
 }
+
+// --- Jacoco custom task ---
+task jacocoTestReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
+    reports {
+        xml.required = true
+        html.required = true
+    }
+
+    def excludeFilter = ['**/R.class', '**/BuildConfig.*', '**/*Test*.*']
+
+    classDirectories.setFrom(fileTree(dir: "$buildDir/intermediates/javac/debug/classes", excludes: excludeFilter))
+    sourceDirectories.setFrom(files(["$projectDir/src/main/java", "$projectDir/src/main/kotlin"]))
+    executionData.setFrom(file("$buildDir/jacoco/testDebugUnitTest.exec"))
+
+    doFirst {
+        file("$buildDir/reports/jacoco/jacocoTestReport").mkdirs()
+    }
+}
+
+

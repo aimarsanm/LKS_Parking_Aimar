@@ -11,8 +11,10 @@ public class LoginViewModel extends ViewModel {
     // Aquí puedes declarar los LiveData y métodos necesarios para la vista de inicio de sesión
     MutableLiveData<Boolean> logged = new MutableLiveData<>(null);
     private final MutableLiveData<String> loginError = new MutableLiveData<>();
-    private final DataRepository dataRepository = DataRepository.getInstance();
-
+    private DataRepository dataRepository = DataRepository.getInstance();
+    void setDataRepository(DataRepository mockRepo) {
+        this.dataRepository = mockRepo;
+    }
     public LiveData<Boolean> isLogged(){
         return logged;
     }
