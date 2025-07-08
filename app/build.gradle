@@ -11,9 +11,13 @@ sonar {
     properties {
         property "sonar.projectKey", "aimarsanm_LKS_Parking_Aimar"
         property "sonar.organization", "aimarsanm-1"
-        property "sonar.host.url", "https://sonarcloud.io "
+        property "sonar.host.url", "https://sonarcloud.io"
         property "sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
-        property "sonar.exclusions", "**/R.class,**/BuildConfig.class,**/*Test*.class"
+        property "sonar.exclusions", "**/R.class,**/R$*.class,**/BuildConfig.class,**/*Test*.class,**/databinding/**/*.*,**/android/databinding/*Binding.*"
+        property "sonar.coverage.exclusions", "**/R.class,**/R$*.class,**/BuildConfig.class,**/*Test*.class,**/databinding/**/*.*,**/android/databinding/*Binding.*"
+        property "sonar.test.inclusions", "**/*Test*.java,**/*Test*.kt"
+        property "sonar.sources", "src/main/java"
+        property "sonar.tests", "src/test/java"
     }
 }
 
@@ -92,17 +96,47 @@ task jacocoTestReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
     reports {
         xml.required = true
         html.required = true
+        xml.outputLocation = file("${buildDir}/reports/jacoco/jacocoTestReport/jacocoTestReport.xml")
+        html.outputLocation = file("${buildDir}/reports/jacoco/jacocoTestReport/html")
     }
 
-    def excludeFilter = ['**/R.class', '**/BuildConfig.*', '**/*Test*.*']
+    def excludeFilter = [
+        '**/R.class',
+        '**/R$*.class',
+        '**/BuildConfig.*',
+        '**/Manifest*.*',
+        '**/*Test*.*',
+        'android/**/*.*',
+        '**/databinding/**/*.*',
+        '**/android/databinding/*Binding.*'
+    ]
 
-    classDirectories.setFrom(fileTree(dir: "$buildDir/intermediates/javac/debug/classes", excludes: excludeFilter))
-    sourceDirectories.setFrom(files(["$projectDir/src/main/java", "$projectDir/src/main/kotlin"]))
-    executionData.setFrom(file("$buildDir/jacoco/testDebugUnitTest.exec"))
+    def javaClasses = fileTree(dir: "$buildDir/intermediates/javac/debug/classes", excludes: excludeFilter)
+    def kotlinClasses = fileTree(dir: "$buildDir/tmp/kotlin-classes/debug", excludes: excludeFilter)
+    
+    classDirectories.setFrom(files([javaClasses, kotlinClasses]))
+    sourceDirectories.setFrom(files([
+        "$projectDir/src/main/java", 
+        "$projectDir/src/main/kotlin"
+    ]))
+    
+    executionData.setFrom(fileTree(dir: "$buildDir", includes: [
+        "jacoco/testDebugUnitTest.exec",
+        "outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec"
+    ]))
 
     doFirst {
         file("$buildDir/reports/jacoco/jacocoTestReport").mkdirs()
     }
 }
+
+// Task to clean and generate fresh coverage reports
+task coverageReport(dependsOn: ['clean', 'testDebugUnitTest', 'jacocoTestReport']) {
+    group = 'reporting'
+    description = 'Generate fresh JaCoCo coverage reports'
+}
+
+// Ensure jacoco report is generated after test
+testDebugUnitTest.finalizedBy jacocoTestReport
 
 

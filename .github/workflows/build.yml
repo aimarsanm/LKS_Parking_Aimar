@@ -36,14 +36,8 @@ jobs:
       - name: Run Unit Tests and Generate Coverage Report
         run: ./gradlew test jacocoTestReport
 
-      - name: Initialize SonarQube Scanner
-        uses: SonarSource/sonarqube-github-action@master
-        with:
-          login: ${{ secrets.SONAR_TOKEN }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Run SonarQube Analysis
         run: ./gradlew sonar --info
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

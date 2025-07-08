@@ -1,0 +1,25 @@
+# SonarQube local configuration example
+# Copy this file to sonar-project.properties if you want to run SonarQube locally
+# Make sure to set your SONAR_TOKEN environment variable
+
+sonar.projectKey=aimarsanm_LKS_Parking_Aimar
+sonar.organization=aimarsanm-1
+sonar.host.url=https://sonarcloud.io
+
+# Source and test directories
+sonar.sources=app/src/main/java
+sonar.tests=app/src/test/java
+
+# Coverage report paths
+sonar.coverage.jacoco.xmlReportPaths=app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
+
+# Exclusions
+sonar.exclusions=**/R.class,**/R$*.class,**/BuildConfig.class,**/*Test*.class,**/databinding/**/*.*,**/android/databinding/*Binding.*
+sonar.coverage.exclusions=**/R.class,**/R$*.class,**/BuildConfig.class,**/*Test*.class,**/databinding/**/*.*,**/android/databinding/*Binding.*
+
+# Test inclusions
+sonar.test.inclusions=**/*Test*.java,**/*Test*.kt
+
+# Language
+sonar.java.source=17
+sonar.java.target=17
