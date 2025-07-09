@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.lksnext.parkingplantilla.domain.Reserva;
 import com.lksnext.parkingplantilla.repository.ReservaRepository;
 
@@ -12,17 +14,26 @@ import java.util.List;
 public class ReservaViewModel extends ViewModel {
 
     private ReservaRepository repository;
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+
     // Constructor por defecto
     public ReservaViewModel() {
         this.repository = new ReservaRepository();
     }
+
     // Constructor para tests
-    public ReservaViewModel(ReservaRepository repository) {
+    public ReservaViewModel(ReservaRepository repository, FirebaseAuth firebaseAuth) {
         this.repository = repository;
+        this.firebaseAuth = firebaseAuth;
     }
+
     // Permitir inyección para tests legacy
     void setRepository(ReservaRepository mockRepo) {
         this.repository = mockRepo;
+    }
+
+    public void setFirebaseAuth(FirebaseAuth firebaseAuth) {
+        this.firebaseAuth = firebaseAuth;
     }
 
     private final MutableLiveData<Boolean> reservaExitosa = new MutableLiveData<>();
@@ -43,7 +54,7 @@ public class ReservaViewModel extends ViewModel {
 
     // Cambia este método para usar el UID del usuario autenticado
     public void cargarReservasUsuario() {
-        com.google.firebase.auth.FirebaseUser user = com.google.firebase.auth.FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser user = firebaseAuth.getCurrentUser();
         if (user == null) {
             // No hay usuario autenticado, no intentes cargar reservas
             reservasUsuario.setValue(null);
@@ -55,6 +66,7 @@ public class ReservaViewModel extends ViewModel {
             public void onReservasLoaded(List<Reserva> reservas) {
                 reservasUsuario.setValue(reservas);
             }
+
             @Override
             public void onError(Exception e) {
                 reservasUsuario.setValue(null);
@@ -74,7 +86,8 @@ public class ReservaViewModel extends ViewModel {
 
     // --- NUEVO: hacer reserva en Firestore ---
     public void hacerReserva(Reserva reserva, ReservaRepository.FirestoreCallback callback) {
-        String uid = com.google.firebase.auth.FirebaseAuth.getInstance().getCurrentUser().getUid();
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        String uid = user != null ? user.getUid() : null;
         reserva.setUsuario(uid); // Guarda el UID como usuario
         repository.guardarReservaFirestore(reserva, new ReservaRepository.FirestoreCallback() {
             @Override
@@ -83,6 +96,7 @@ public class ReservaViewModel extends ViewModel {
                 reservaExitosa.setValue(true);
                 callback.onSuccess();
             }
+
             @Override
             public void onFailure(Exception e) {
                 reservaExitosa.setValue(false);
@@ -106,6 +120,7 @@ public class ReservaViewModel extends ViewModel {
                 cargarReservasUsuario(); // Cambiado: sin argumentos
                 callback.onSuccess();
             }
+
             @Override
             public void onFailure(Exception e) {
                 callback.onFailure(e);
@@ -121,6 +136,7 @@ public class ReservaViewModel extends ViewModel {
                 cargarReservasUsuario(); // Cambiado: sin argumentos
                 callback.onSuccess();
             }
+
             @Override
             public void onFailure(Exception e) {
                 callback.onFailure(e);
@@ -159,6 +175,7 @@ public class ReservaViewModel extends ViewModel {
                 }
                 reservasUsuario.setValue(filtradas);
             }
+
             @Override
             public void onError(Exception e) {
                 reservasUsuario.setValue(null);

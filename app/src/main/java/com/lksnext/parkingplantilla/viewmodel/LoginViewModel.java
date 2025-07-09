@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.lksnext.parkingplantilla.data.DataRepository;
 
 public class LoginViewModel extends ViewModel {
@@ -12,13 +13,30 @@ public class LoginViewModel extends ViewModel {
     MutableLiveData<Boolean> logged = new MutableLiveData<>(null);
     private final MutableLiveData<String> loginError = new MutableLiveData<>();
     private DataRepository dataRepository = DataRepository.getInstance();
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+
+    public LoginViewModel() {
+        this.dataRepository = DataRepository.getInstance();
+    }
+    public LoginViewModel(DataRepository dataRepository) {
+        this.dataRepository = dataRepository;
+    }
+
     void setDataRepository(DataRepository mockRepo) {
         this.dataRepository = mockRepo;
     }
-    public LiveData<Boolean> isLogged(){
+
+    public void setFirebaseAuth(FirebaseAuth firebaseAuth) {
+        this.firebaseAuth = firebaseAuth;
+    }
+
+    public LiveData<Boolean> isLogged() {
         return logged;
     }
-    public LiveData<String> getLoginError() { return loginError; }
+
+    public LiveData<String> getLoginError() {
+        return loginError;
+    }
 
     public void loginUser(String email, String password) {
         dataRepository.login(email, password, new com.lksnext.parkingplantilla.domain.Callback() {
@@ -27,6 +45,7 @@ public class LoginViewModel extends ViewModel {
                 logged.setValue(Boolean.TRUE);
                 loginError.setValue(null);
             }
+
             @Override
             public void onFailure(String errorMessage) {
                 logged.setValue(Boolean.FALSE);
@@ -39,9 +58,10 @@ public class LoginViewModel extends ViewModel {
     public com.google.firebase.auth.FirebaseUser getCurrentUser() {
         return dataRepository.getCurrentUser();
     }
+
     // Cerrar sesión
     public void signOut() {
-        com.google.firebase.auth.FirebaseAuth.getInstance().signOut();
+        firebaseAuth.signOut();
         logged.setValue(Boolean.FALSE);
     }
 

@@ -13,7 +13,15 @@ public class RegisterViewModel extends ViewModel {
     private final MutableLiveData<String> registerError = new MutableLiveData<>();
     public LiveData<String> getRegisterError() { return registerError; }
 
-    private DataRepository dataRepository = DataRepository.getInstance();
+    private DataRepository dataRepository;
+
+    public RegisterViewModel() {
+        this.dataRepository = DataRepository.getInstance();
+    }
+    public RegisterViewModel(DataRepository dataRepository) {
+        this.dataRepository = dataRepository;
+    }
+
     // Permitir inyección para tests
     void setDataRepository(DataRepository mockRepo) {
         this.dataRepository = mockRepo;
