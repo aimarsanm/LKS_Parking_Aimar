@@ -68,4 +68,57 @@ public class LoginViewModelTest {
         assertFalse(LiveDataTestUtil.getValue(viewModel.isLogged()));
         assertEquals("fail", LiveDataTestUtil.getValue(viewModel.getLoginError()));
     }
+
+    @Test
+    public void loginUser_whiteBox_initialState_isNull() throws Exception {
+        // White box: initial state
+        assertNull(LiveDataTestUtil.getValue(viewModel.isLogged()));
+        assertNull(LiveDataTestUtil.getValue(viewModel.getLoginError()));
+    }
+
+    @Test
+    public void loginUser_whiteBox_multipleTransitions() throws Exception {
+        // White box: multiple transitions
+        fakeRepo.setLoginShouldSucceed(true);
+        viewModel.loginUser("user1@mail.com", "pass1");
+        assertTrue(LiveDataTestUtil.getValue(viewModel.isLogged()));
+        fakeRepo.setLoginShouldSucceed(false);
+        fakeRepo.setErrorMessage("fail1");
+        viewModel.loginUser("user2@mail.com", "fail");
+        assertFalse(LiveDataTestUtil.getValue(viewModel.isLogged()));
+        assertEquals("fail1", LiveDataTestUtil.getValue(viewModel.getLoginError()));
+        fakeRepo.setLoginShouldSucceed(true);
+        viewModel.loginUser("user3@mail.com", "pass3");
+        assertTrue(LiveDataTestUtil.getValue(viewModel.isLogged()));
+    }
+
+    @Test
+    public void loginUser_blackBox_equivalencePartition() throws Exception {
+        // Black box: valid credentials (success partition)
+        fakeRepo.setLoginShouldSucceed(true);
+        viewModel.loginUser("valid@mail.com", "validpass");
+        assertTrue(LiveDataTestUtil.getValue(viewModel.isLogged()));
+        // Black box: invalid credentials (failure partition)
+        fakeRepo.setLoginShouldSucceed(false);
+        fakeRepo.setErrorMessage("invalid");
+        viewModel.loginUser("invalid@mail.com", "badpass");
+        assertFalse(LiveDataTestUtil.getValue(viewModel.isLogged()));
+        assertEquals("invalid", LiveDataTestUtil.getValue(viewModel.getLoginError()));
+    }
+
+    @Test
+    public void loginUser_blackBox_boundaryValues() throws Exception {
+        // Black box: empty email and password (boundary)
+        fakeRepo.setLoginShouldSucceed(false);
+        fakeRepo.setErrorMessage("empty");
+        viewModel.loginUser("", "");
+        assertFalse(LiveDataTestUtil.getValue(viewModel.isLogged()));
+        assertEquals("empty", LiveDataTestUtil.getValue(viewModel.getLoginError()));
+        // Black box: very long email and password (boundary)
+        String longEmail = "a".repeat(256) + "@mail.com";
+        String longPass = "b".repeat(256);
+        fakeRepo.setLoginShouldSucceed(true);
+        viewModel.loginUser(longEmail, longPass);
+        assertTrue(LiveDataTestUtil.getValue(viewModel.isLogged()));
+    }
 }

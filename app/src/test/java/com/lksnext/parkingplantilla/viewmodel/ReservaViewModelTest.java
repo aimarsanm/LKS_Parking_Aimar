@@ -96,4 +96,57 @@ public class ReservaViewModelTest {
         assertNotNull(result);
         assertTrue(result.isEmpty());
     }
+
+    @Test
+    public void hacerReserva_equivalencePartition_successAndFailure() throws Exception {
+        // Equivalence partition: reserva exitosa
+        viewModel.setReservaDebeSerExitosa(true);
+        viewModel.hacerReserva(new Reserva());
+        assertTrue(LiveDataTestUtil.getValue(viewModel.getReservaExitosa()));
+        // Equivalence partition: reserva fallida
+        viewModel.setReservaDebeSerExitosa(false);
+        viewModel.hacerReserva(new Reserva());
+        assertFalse(LiveDataTestUtil.getValue(viewModel.getReservaExitosa()));
+    }
+
+    @Test
+    public void cargarReservasUsuario_equivalencePartition_nullEmptyAndFilled() throws Exception {
+        // Partition: null
+        viewModel.setReservasFake(null);
+        viewModel.cargarReservasUsuario();
+        assertNull(LiveDataTestUtil.getValue(viewModel.getReservasUsuario()));
+        // Partition: empty list
+        viewModel.setReservasFake(new ArrayList<>());
+        viewModel.cargarReservasUsuario();
+        List<Reserva> result = LiveDataTestUtil.getValue(viewModel.getReservasUsuario());
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+        // Partition: filled list
+        ArrayList<Reserva> reservas = new ArrayList<>();
+        reservas.add(new Reserva());
+        reservas.add(new Reserva());
+        viewModel.setReservasFake(reservas);
+        viewModel.cargarReservasUsuario();
+        result = LiveDataTestUtil.getValue(viewModel.getReservasUsuario());
+        assertNotNull(result);
+        assertEquals(2, result.size());
+    }
+
+    @Test
+    public void cargarReservasUsuario_boundaryValues() throws Exception {
+        // Boundary: 0 reservas
+        viewModel.setReservasFake(new ArrayList<>());
+        viewModel.cargarReservasUsuario();
+        List<Reserva> result = LiveDataTestUtil.getValue(viewModel.getReservasUsuario());
+        assertNotNull(result);
+        assertEquals(0, result.size());
+        // Boundary: 1 reserva
+        ArrayList<Reserva> reservas = new ArrayList<>();
+        reservas.add(new Reserva());
+        viewModel.setReservasFake(reservas);
+        viewModel.cargarReservasUsuario();
+        result = LiveDataTestUtil.getValue(viewModel.getReservasUsuario());
+        assertNotNull(result);
+        assertEquals(1, result.size());
+    }
 }
