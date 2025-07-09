@@ -1,5 +1,5 @@
 package com.lksnext.parkingplantilla.domain;
-//aa
+
 public class Hora {
 
     private int horaInicio;
