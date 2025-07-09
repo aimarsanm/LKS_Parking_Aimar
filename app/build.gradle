@@ -75,28 +75,38 @@ dependencies {
 }
 
 // --- Jacoco custom task ---
-task jacocoTestReport(type: JacocoReport, dependsOn: ["testDebugUnitTest"]) {
+task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
+    group = "Reporting"
+    description = "Genera el reporte de cobertura de Jacoco para tests unitarios."
+
     reports {
         xml.required = true
         html.required = true
     }
 
-    def excludeFilter = ['**/R.class', '**/BuildConfig.*', '**/*Test*.*']
+    def fileFilter = [
+        '**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*',
+        '**/*Test*.*', 'android/**/*.*', '**/databinding/*', '**/BR.*'
+    ]
 
-    classDirectories.setFrom(fileTree(dir: "$buildDir/intermediates/javac/debug/classes", excludes: excludeFilter))
-    sourceDirectories.setFrom(files(["$projectDir/src/main/java", "$projectDir/src/main/kotlin"]))
+    def debugTree = fileTree(dir: "$buildDir/intermediates/javac/debug/compileDebugJavaWithJavac/classes", excludes: fileFilter)
+    def mainSrc = "$projectDir/src/main/java"
 
-    // Buscar el archivo .exec en ambas rutas posibles
-    def execFile1 = file("$buildDir/jacoco/testDebugUnitTest.exec")
-    def execFile2 = file("$buildDir/outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec")
-    if (execFile2.exists()) {
-        executionData.setFrom(execFile2)
-    } else {
-        executionData.setFrom(execFile1)
-    }
-
+    sourceDirectories.setFrom(files([mainSrc]))
+    classDirectories.setFrom(files([debugTree]))
+    executionData.setFrom(fileTree(dir: buildDir, includes: [
+        'jacoco/testDebugUnitTest.exec',
+        'outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec'
+    ]))
+    // Para Kotlin, puedes agregar src/main/kotlin si lo usas
+    // sourceDirectories.setFrom(files([mainSrc, "$projectDir/src/main/kotlin"]))
+    // classDirectories.setFrom(files([debugTree, fileTree(dir: "$buildDir/tmp/kotlin-classes/debug", excludes: fileFilter)]))
     doFirst {
-        file("$buildDir/reports/jacoco/jacocoTestReport").mkdirs()
+        executionData.files.each { file ->
+            if (!file.exists()) {
+                logger.warn("Jacoco execution data file does not exist: ${file}")
+            }
+        }
     }
 }
 

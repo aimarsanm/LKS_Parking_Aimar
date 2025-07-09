@@ -15,7 +15,9 @@ import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 public class LoginViewModelRealTest {
@@ -103,5 +105,34 @@ public class LoginViewModelRealTest {
         viewModel.loginUser(longEmail, longPass);
         assertTrue(LiveDataTestUtil.getValue(viewModel.isLogged()));
     }
-}
 
+    @Test
+    public void signOut_setsLoggedFalse() throws Exception {
+        // Prepara un mock de FirebaseAuth
+        com.google.firebase.auth.FirebaseAuth mockAuth = mock(com.google.firebase.auth.FirebaseAuth.class);
+        viewModel.setFirebaseAuth(mockAuth);
+        // Llama a signOut
+        viewModel.signOut();
+        Boolean result = LiveDataTestUtil.getValue(viewModel.isLogged());
+        assertFalse(result);
+        // Verifica que se llamó a signOut en el mock
+        Mockito.verify(mockAuth).signOut();
+    }
+
+    @Test
+    public void resetPassword_callsRepository() throws Exception {
+        // Prepara un callback
+        Callback callback = mock(Callback.class);
+        // Llama a resetPassword
+        viewModel.resetPassword("mail@mail.com", callback);
+        // Verifica que se llamó a sendPasswordResetEmail en el repo
+        Mockito.verify(mockRepo).sendPasswordResetEmail(Mockito.eq("mail@mail.com"), Mockito.eq(callback));
+    }
+
+    @Test
+    public void getCurrentUser_returnsRepositoryUser() {
+        com.google.firebase.auth.FirebaseUser mockUser = mock(com.google.firebase.auth.FirebaseUser.class);
+        when(mockRepo.getCurrentUser()).thenReturn(mockUser);
+        assertEquals(mockUser, viewModel.getCurrentUser());
+    }
+}
