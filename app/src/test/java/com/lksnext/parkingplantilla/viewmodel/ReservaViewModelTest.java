@@ -67,4 +67,33 @@ public class ReservaViewModelTest {
         List<Reserva> result = LiveDataTestUtil.getValue(viewModel.getReservasUsuario());
         assertNull(result);
     }
+
+    @Test
+    public void reservaExitosa_inicial_esNull() throws Exception {
+        assertNull(LiveDataTestUtil.getValue(viewModel.getReservaExitosa()));
+    }
+
+    @Test
+    public void reservasUsuario_inicial_esNull() throws Exception {
+        assertNull(LiveDataTestUtil.getValue(viewModel.getReservasUsuario()));
+    }
+
+    @Test
+    public void hacerReserva_multipleCalls_changesState() throws Exception {
+        viewModel.setReservaDebeSerExitosa(true);
+        viewModel.hacerReserva(new Reserva());
+        assertTrue(LiveDataTestUtil.getValue(viewModel.getReservaExitosa()));
+        viewModel.setReservaDebeSerExitosa(false);
+        viewModel.hacerReserva(new Reserva());
+        assertFalse(LiveDataTestUtil.getValue(viewModel.getReservaExitosa()));
+    }
+
+    @Test
+    public void cargarReservasUsuario_listaVacia() throws Exception {
+        viewModel.setReservasFake(new ArrayList<>());
+        viewModel.cargarReservasUsuario();
+        List<Reserva> result = LiveDataTestUtil.getValue(viewModel.getReservasUsuario());
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+    }
 }

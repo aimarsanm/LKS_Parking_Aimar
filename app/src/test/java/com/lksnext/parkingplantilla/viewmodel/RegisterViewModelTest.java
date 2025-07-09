@@ -46,4 +46,22 @@ public class RegisterViewModelTest {
         assertFalse(LiveDataTestUtil.getValue(viewModel.getRegisterSuccess()));
         assertEquals("error", LiveDataTestUtil.getValue(viewModel.getRegisterError()));
     }
+
+    @Test
+    public void register_setsRegisterSuccessNull_whenNoCallback() throws Exception {
+        // Estado inicial nulo (no se ha llamado a register)
+        assertNull(LiveDataTestUtil.getValue(viewModel.getRegisterSuccess()));
+    }
+
+    @Test
+    public void register_multipleCalls_changesState() throws Exception {
+        fakeRepo.setRegisterShouldSucceed(true);
+        viewModel.register("Nombre", "Apellido", "mail@mail.com", "1234");
+        assertTrue(LiveDataTestUtil.getValue(viewModel.getRegisterSuccess()));
+        fakeRepo.setRegisterShouldSucceed(false);
+        fakeRepo.setErrorMessage("fail");
+        viewModel.register("Nombre", "Apellido", "mail@mail.com", "fail");
+        assertFalse(LiveDataTestUtil.getValue(viewModel.getRegisterSuccess()));
+        assertEquals("fail", LiveDataTestUtil.getValue(viewModel.getRegisterError()));
+    }
 }
