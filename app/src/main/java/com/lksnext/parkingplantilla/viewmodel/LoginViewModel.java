@@ -12,14 +12,16 @@ public class LoginViewModel extends ViewModel {
     // Aquí puedes declarar los LiveData y métodos necesarios para la vista de inicio de sesión
     MutableLiveData<Boolean> logged = new MutableLiveData<>(null);
     private final MutableLiveData<String> loginError = new MutableLiveData<>();
-    private DataRepository dataRepository = DataRepository.getInstance();
-    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    private DataRepository dataRepository;
+    private FirebaseAuth firebaseAuth;
 
     public LoginViewModel() {
         this.dataRepository = DataRepository.getInstance();
+        this.firebaseAuth = null; // Evita inicialización de Firebase en tests
     }
     public LoginViewModel(DataRepository dataRepository) {
         this.dataRepository = dataRepository;
+        this.firebaseAuth = null; // Evita inicialización de Firebase en tests
     }
 
     void setDataRepository(DataRepository mockRepo) {
@@ -61,7 +63,9 @@ public class LoginViewModel extends ViewModel {
 
     // Cerrar sesión
     public void signOut() {
-        firebaseAuth.signOut();
+        if (firebaseAuth != null) {
+            firebaseAuth.signOut();
+        }
         logged.setValue(Boolean.FALSE);
     }
 
