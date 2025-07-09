@@ -107,16 +107,58 @@ public class LoginViewModelRealTest {
     }
 
     @Test
-    public void signOut_setsLoggedFalse() throws Exception {
+    public void signOut_firebaseAuthNotNull_setsLoggedFalse() throws Exception {
         // Prepara un mock de FirebaseAuth
         com.google.firebase.auth.FirebaseAuth mockAuth = mock(com.google.firebase.auth.FirebaseAuth.class);
         viewModel.setFirebaseAuth(mockAuth);
+
         // Llama a signOut
         viewModel.signOut();
-        Boolean result = LiveDataTestUtil.getValue(viewModel.isLogged());
-        assertFalse(result);
+
         // Verifica que se llamó a signOut en el mock
         Mockito.verify(mockAuth).signOut();
+
+        Boolean result = LiveDataTestUtil.getValue(viewModel.isLogged());
+        assertFalse(result);
+    }
+
+    @Test
+    public void signOut_firebaseAuthNull_setsLoggedFalse() throws Exception {
+        // Asegurarse de que firebaseAuth es null
+        viewModel.setFirebaseAuth(null);
+
+        viewModel.signOut();
+
+        Boolean result = LiveDataTestUtil.getValue(viewModel.isLogged());
+        assertFalse(result);
+    }
+
+    @Test
+    public void loginUser_nullCredentials_setsError() throws Exception {
+        doAnswer(invocation -> {
+            Callback cb = (Callback) invocation.getArguments()[2];
+            cb.onFailure("error");
+            return null;
+        }).when(mockRepo).login(any(), any(), any(Callback.class));
+
+        viewModel.loginUser(null, null);
+
+        assertFalse(LiveDataTestUtil.getValue(viewModel.isLogged()));
+        assertEquals("error", LiveDataTestUtil.getValue(viewModel.getLoginError()));
+    }
+
+    @Test
+    public void loginUser_invalidEmailFormat_setsError() throws Exception {
+        doAnswer(invocation -> {
+            Callback cb = (Callback) invocation.getArguments()[2];
+            cb.onFailure("invalid format");
+            return null;
+        }).when(mockRepo).login(eq("invalid-email"), eq("password"), any(Callback.class));
+
+        viewModel.loginUser("invalid-email", "password");
+
+        assertFalse(LiveDataTestUtil.getValue(viewModel.isLogged()));
+        assertEquals("invalid format", LiveDataTestUtil.getValue(viewModel.getLoginError()));
     }
 
     @Test
@@ -127,6 +169,20 @@ public class LoginViewModelRealTest {
         viewModel.resetPassword("mail@mail.com", callback);
         // Verifica que se llamó a sendPasswordResetEmail en el repo
         Mockito.verify(mockRepo).sendPasswordResetEmail(Mockito.eq("mail@mail.com"), Mockito.eq(callback));
+    }
+
+    @Test
+    public void resetPassword_nullEmail_callsRepository() throws Exception {
+        Callback callback = mock(Callback.class);
+        viewModel.resetPassword(null, callback);
+        Mockito.verify(mockRepo).sendPasswordResetEmail(Mockito.eq(null), Mockito.eq(callback));
+    }
+
+    @Test
+    public void resetPassword_invalidEmail_callsRepository() throws Exception {
+        Callback callback = mock(Callback.class);
+        viewModel.resetPassword("invalid-email", callback);
+        Mockito.verify(mockRepo).sendPasswordResetEmail(Mockito.eq("invalid-email"), Mockito.eq(callback));
     }
 
     @Test
