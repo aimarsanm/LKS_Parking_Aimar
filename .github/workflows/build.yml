@@ -34,16 +34,9 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Run Unit Tests and Generate Coverage Report
-        run: ./gradlew test jacocoTestReport
-
-      - name: Initialize SonarQube Scanner
-        uses: SonarSource/sonarqube-github-action@master
-        with:
-          login: ${{ secrets.SONAR_TOKEN }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./gradlew testDebugUnitTest jacocoTestReport
 
       - name: Run SonarQube Analysis
-        run: ./gradlew sonar --info
+        run: ./gradlew sonar --info -Dsonar.coverage.jacoco.xmlReportPaths=app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

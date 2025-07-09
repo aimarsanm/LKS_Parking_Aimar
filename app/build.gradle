@@ -1,21 +1,7 @@
-plugins {
-    id "org.sonarqube" version "6.2.0.5505"
-}
-
 apply plugin: 'com.android.application'
 apply plugin: 'androidx.navigation.safeargs'
 apply plugin: 'jacoco'
 apply plugin: 'com.google.gms.google-services'
-
-sonar {
-    properties {
-        property "sonar.projectKey", "aimarsanm_LKS_Parking_Aimar"
-        property "sonar.organization", "aimarsanm-1"
-        property "sonar.host.url", "https://sonarcloud.io "
-        property "sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
-        property "sonar.exclusions", "**/R.class,**/BuildConfig.class,**/*Test*.class"
-    }
-}
 
 android {
     namespace "com.lksnext.parkingplantilla"
@@ -80,15 +66,16 @@ dependencies {
     testImplementation 'androidx.arch.core:core-testing:2.2.0'
     testImplementation 'org.jacoco:org.jacoco.core:0.8.12'
     testImplementation 'org.jacoco:org.jacoco.report:0.8.12'
+    testImplementation 'org.robolectric:robolectric:4.11.1'
 
     androidTestImplementation 'androidx.test.ext:junit:1.2.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
     androidTestImplementation 'androidx.test:rules:1.6.1'
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
 }
 
 // --- Jacoco custom task ---
-task jacocoTestReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
+task jacocoTestReport(type: JacocoReport, dependsOn: ["testDebugUnitTest"]) {
     reports {
         xml.required = true
         html.required = true
@@ -98,11 +85,23 @@ task jacocoTestReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
 
     classDirectories.setFrom(fileTree(dir: "$buildDir/intermediates/javac/debug/classes", excludes: excludeFilter))
     sourceDirectories.setFrom(files(["$projectDir/src/main/java", "$projectDir/src/main/kotlin"]))
-    executionData.setFrom(file("$buildDir/jacoco/testDebugUnitTest.exec"))
+
+    // Buscar el archivo .exec en ambas rutas posibles
+    def execFile1 = file("$buildDir/jacoco/testDebugUnitTest.exec")
+    def execFile2 = file("$buildDir/outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec")
+    if (execFile2.exists()) {
+        executionData.setFrom(execFile2)
+    } else {
+        executionData.setFrom(execFile1)
+    }
 
     doFirst {
         file("$buildDir/reports/jacoco/jacocoTestReport").mkdirs()
     }
 }
 
-
+afterEvaluate {
+    tasks.named("testDebugUnitTest").configure {
+        finalizedBy tasks.named("jacocoTestReport")
+    }
+}
